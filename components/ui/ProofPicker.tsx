@@ -2,11 +2,10 @@
 
 import { useRef, useState } from 'react';
 import { ACCEPT, MAX_FILE_MB, kb, uploadProof, type Uploaded } from './upload';
-import { Icon } from '../Icon';
 
-/** Single required proof file (funding slips, cheques, cash receipts). */
+/** One proof file (receipt, transfer slip, cheque photo…). Uploads to storage as soon as it's chosen. */
 export function ProofPicker({
-  companyId, folder, value, onChange, hint = 'Drop the transfer slip, cheque photo or signed cash receipt'
+  companyId, folder, value, onChange, hint = 'Add a receipt, photo or PDF'
 }: { companyId: string; folder: string; value: Uploaded | null; onChange: (u: Uploaded | null) => void; hint?: string }) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -26,38 +25,30 @@ export function ProofPicker({
   }
 
   return (
-    <div className="col" style={{ gap: 8 }}>
+    <div className="stack" style={{ gap: 8 }}>
       <input ref={input} type="file" accept={ACCEPT} hidden onChange={(e) => pick(e.target.files?.[0])} />
       {value ? (
-        <div className="file-card">
-          <span className="doc-thumb"><span /><span /><span /><span /></span>
-          <span className="col grow" style={{ gap: 4 }}>
-            <span style={{ fontWeight: 600, overflowWrap: 'anywhere' }}>{value.name}</span>
-            <span className="small muted">{kb(value.size)} · uploaded just now</span>
+        <div className="file">
+          <span className="file-icon">✓</span>
+          <span className="grow">
+            <b>{value.name}</b>
+            <span className="muted small"> · {kb(value.size)}</span>
           </span>
-          <button type="button" className="btn md" onClick={() => input.current?.click()}>Replace</button>
-          <button type="button" className="icon-btn ghost" aria-label="Remove file" onClick={() => onChange(null)}>
-            <Icon name="close" size={16} />
-          </button>
+          <button type="button" className="btn ghost sm" onClick={() => input.current?.click()}>Replace</button>
+          <button type="button" className="btn ghost sm" onClick={() => onChange(null)}>Remove</button>
         </div>
       ) : (
-        <div
-          className="dropzone"
+        <button
+          type="button"
+          className="drop"
+          disabled={busy}
+          onClick={() => input.current?.click()}
           onDragOver={(e) => e.preventDefault()}
-          onDrop={(e) => {
-            e.preventDefault();
-            pick(e.dataTransfer.files?.[0]);
-          }}
+          onDrop={(e) => { e.preventDefault(); pick(e.dataTransfer.files?.[0]); }}
         >
-          <span className="ink2" style={{ lineHeight: 1.45 }}>
-            {hint}
-            <br />
-            PDF, JPG or PNG · up to {MAX_FILE_MB} MB
-          </span>
-          <button type="button" className="btn dark" disabled={busy} onClick={() => input.current?.click()}>
-            {busy ? 'Uploading…' : 'Choose file'}
-          </button>
-        </div>
+          <b>{busy ? 'Uploading…' : hint}</b>
+          <span className="muted small">Tap to choose or drop a file · PDF, JPG or PNG · up to {MAX_FILE_MB} MB</span>
+        </button>
       )}
       {err ? <div role="alert" className="alert">{err}</div> : null}
     </div>

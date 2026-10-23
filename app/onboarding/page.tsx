@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
-import { BrandMark } from '@/components/Icon';
+import { BrandMark } from '@/components/Brand';
 import { getSession } from '@/lib/session';
 import { OnboardingForm } from './OnboardingForm';
 
@@ -11,21 +11,11 @@ export default async function OnboardingPage() {
   if (!user) redirect('/sign-in');
   if (profile) redirect('/');
   return (
-    <div className="sheet-wrap" style={{ alignItems: 'center' }}>
-      <div className="sheet" style={{ width: 520 }}>
-        <div className="sheet-head" style={{ flexDirection: 'column', gap: 18 }}>
-          <div className="brand" style={{ padding: 0 }}>
-            <BrandMark />
-            <span className="brand-name">Tally</span>
-          </div>
-          <div className="col" style={{ gap: 6 }}>
-            <span className="eyebrow">Signed in as {user.email ?? user.phone}</span>
-            <h1 className="h1 sm">Set up your workspace</h1>
-            <span className="muted" style={{ lineHeight: 1.45 }}>
-              You’ll be the owner. If your company already uses Tally, don’t create a new one — ask an admin to add you, then sign in again.
-            </span>
-          </div>
-        </div>
+    <div className="center">
+      <div className="card auth">
+        <div className="brand big"><BrandMark size={40} /><span>Tally</span></div>
+        <h1>Set up your workspace</h1>
+        <p className="muted">Signed in as {user.email ?? user.phone}. You’ll be the owner.</p>
         <OnboardingForm />
       </div>
     </div>

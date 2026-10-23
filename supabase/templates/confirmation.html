@@ -1,0 +1,7 @@
+<div style="font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; max-width: 460px; margin: 0 auto; padding: 32px 24px; color: #111113">
+  <div style="display: inline-block; width: 32px; height: 32px; border-radius: 8px; background: #E11D2E"></div>
+  <h1 style="font-size: 24px; margin: 18px 0 8px">Your Tally sign-in code</h1>
+  <p style="color: #6B6B72; margin: 0 0 20px">Enter this code in Tally to sign in. It expires in a few minutes.</p>
+  <p style="font-family: ui-monospace, monospace; font-size: 34px; font-weight: 700; letter-spacing: 0.25em; margin: 0 0 24px">{{ .Token }}</p>
+  <p style="color: #6B6B72; font-size: 13px; margin: 0">Or <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email" style="color: #111113">sign in with this link</a>. If you didn’t ask for this, ignore this email.</p>
+</div>

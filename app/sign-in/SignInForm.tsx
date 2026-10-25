@@ -16,7 +16,7 @@ export function SignInForm({ initialError }: { initialError: string | null }) {
     setBusy(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    const { error } = await supabase.auth.signInWithPassword({ email: email.includes('@') ? email.trim() : `${email.trim()}@tally.app`, password });
     if (error) {
       setBusy(false);
       setError('Wrong email or password.');
@@ -30,8 +30,8 @@ export function SignInForm({ initialError }: { initialError: string | null }) {
   return (
     <form onSubmit={submit} className="form">
       <div className="field">
-        <label htmlFor="email">Email</label>
-        <input id="email" className="input" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
+        <label htmlFor="email">Email or username</label>
+        <input id="email" className="input" type="text" autoCapitalize="none" autoCorrect="off" autoComplete="username" value={email} onChange={(e) => setEmail(e.target.value)} required autoFocus />
       </div>
       <div className="field">
         <label htmlFor="password">Password</label>
